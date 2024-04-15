@@ -1,0 +1,179 @@
+Fonction Xpow(x, y)
+    val = 1
+    Pour i allant de 0 à y-1
+        val = val * x
+    Fin Pour
+    Retourner val
+Fin Fonction
+
+Fonction BaseToDec(base, toHexa, tab)
+    toHexa = convertir toHexa en chaîne
+    length = longueur de toHexa
+    value = 0
+    Pour i allant de 0 à length-1
+        one = Xpow(base, i) * convertir en entier (10 + index de tab dans toHexa[(length - 1) - i]) si toHexa[(length - 1) - i] est dans tab, sinon convertir en entier toHexa[(length - 1) - i]
+        value = value + one
+    Fin Pour
+    Retourner value
+Fin Fonction
+
+Fonction DecToBase(base, toHexa, tab)
+    quotient = toHexa
+    hexa = ""
+    Tant que quotient != 0
+        modulo = quotient % base
+        quotient = quotient / base
+        hexa = convertir en chaîne (tab[modulo % 10] si modulo >= 10, sinon modulo) + hexa
+    Fin Tant que
+    Retourner hexa
+Fin Fonction
+
+Fonction toInto(InputBase, Value, OutputBase)
+    tab = ["A", "B", "C", "D", "E", "F"]
+    Retourner convertir en chaîne DecToBase(OutputBase, BaseToDec(InputBase, Value, tab), tab)
+Fin Fonction
+
+Fonction countVar(toCalc)
+    variables = liste vide
+    toCalc = convertir toCalc en minuscule
+    i = 0
+    Pour chaque x dans toCalc
+        Si x n'est pas un espace
+            Si x est entre 'a' et 'z' et (condition complexe basée sur les positions de x dans toCalc)
+                Si x n'est pas déjà dans variables
+                    Ajouter x à variables
+    Fin Pour
+    Retourner variables
+Fin Fonction
+
+Fonction indexReplace(chaine, index, car)
+    Retourner chaine jusqu'à index + car + chaine après index
+Fin Fonction
+
+Fonction AentreZ(x)
+    Retourner x est entre 'a' et 'z'
+Fin Fonction
+
+Fonction analyse(toCalc, line, variables)
+    toCalc = convertir toCalc en minuscule
+    i = 0
+    Pour chaque x dans toCalc
+        Si x n'est pas un espace
+            Si x est entre 'a' et 'z' et (condition complexe basée sur les positions de x dans toCalc)
+                toCalc = indexReplace(toCalc, i, line[index de variables dans x])
+    Fin Pour
+    Retourner évaluer toCalc comme une expression
+Fin Fonction
+
+Fonction mytable(variables)
+    max = ""
+    table = liste vide
+    Pour chaque x dans variables
+        max = max + "1"
+    Fin Pour
+    max = convertir max en entier
+    max = toInto(2, max, 10)
+    Pour x allant de 0 à max
+        add = liste vide
+        res = toInto(10, x, 2)
+        Pour chaque y dans res
+            Ajouter y converti en entier à add
+        Fin Pour
+        Si longueur de add est inférieure à longueur de variables
+            Pour y allant de 0 à longueur de variables - longueur de add
+                Ajouter 0 au début de add
+        Fin Pour
+        Ajouter add à table
+    Fin Pour
+    Retourner table
+Fin Fonction
+
+Fonction TrulyTable(generator)
+    generator = convertir generator en minuscule
+    variables = countVar(generator)
+    
+    table1 = liste vide
+    table2 = liste vide
+    string1 = liste vide
+    string2 = liste vide
+    lines = chaîne vide
+    count = 0
+    k = 0
+    table = mytable(variables)
+    len_var = longueur de variables
+    Si (len_var / 2) est supérieur à (int)(len_var / 2)
+        count = (int)(len_var / 2) + 1
+    Sinon
+        count = (int)(len_var / 2)
+    Fin Si
+
+    Pour k allant de 0 à count-1
+        Ajouter variables[k] à string1
+    Fin Pour
+    
+    table1 = mytable(string1)
+
+    Tant que count < len_var
+        Ajouter variables[count] à string2
+        count = count + 1
+    Fin Tant que
+
+    table2 = mytable(string2)
+
+    Pour t allant de 0 à longueur de string2 - 1
+        Ajouter string2[t] à lines
+    Fin Pour
+    
+    Ajouter '\\' à lines
+    Pour t allant de 0 à longueur de string1 - 1
+        Ajouter string1[t] à lines
+    Fin Pour
+    
+    longueur = longueur de lines
+    Ajouter " | " à lines
+    Pour t allant de 0 à longueur de table1 - 1
+        Pour z allant de 0 à longueur de table1[0] - 1
+            Ajouter table1[t][z] à lines
+        Fin Pour
+        Ajouter " | " à lines
+    Fin Pour
+    hr = chaîne vide
+    Pour t allant de 0 à longueur de lines - 1
+        Ajouter "-" à hr
+    Fin Pour
+    Ajouter "\n" à lines
+    Ajouter hr à lines
+    Ajouter "\n" à lines
+
+    x = 0
+    Pour t allant de 0 à longueur de table2 - 1
+        Pour z allant de 0 à longueur de table2[0] - 1
+            Ajouter table2[t][z] à lines
+        Fin Pour
+        espace = chaîne vide
+        Pour t allant de 0 à longueur - 1
+            Ajouter ' ' à espace
+        Fin Pour
+        Ajouter espace à lines
+        Ajouter " | " à lines
+        len_table = longueur de table
+        Tant que x < len_table
+            Ajouter analyse(generator, table[x], variables) à lines
+            espace = chaîne vide
+            Pour t allant de 0 à longueur de table1[0] - 1
+                Ajouter ' ' à espace
+            Fin Pour
+            Ajouter espace à lines
+            x = x + 2
+            Ajouter " | " à lines
+        Fin Tant que
+        x = 1
+        Ajouter "\n" à lines
+    Fin Pour
+
+    Imprimer "la carte de Karnaugh :\n\n" + lines + "\n\n"
+    Retourner 1
+Fin Fonction
+
+Start = lire une chaîne
+TrulyTable(Start)
