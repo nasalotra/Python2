@@ -25,3 +25,9 @@ Ce projet vise à simplifier une fonction logique en utilisant la méthode KARNA
  - Un exemple de fonction logique pourrait être `(A and not(B)) or not(C)`.
 
 En suivant ces instructions, vous pourrez minimiser votre fonction logique en utilisant la méthode KARNAUGH.
+
+###########################################################################################################
+      Je m'excuse pour l'incomplétude de la fonction et l'absence de solution pour cette exercice. 
+            Cependant, je vous ai fourni un code détaillé qui génère un tableau de Karnaugh 
+                                          Bonne soirée
+###########################################################################################################
